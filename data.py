@@ -15,8 +15,6 @@ class DatasetConfig( object ):
 
     def __init__( self ):
         self._dataset_path =  ""
-        self._train_data_name = ""
-        self._test_data_name  = ""
         self._class_num = 0
         self._row = 0
         self._column = 0
@@ -38,8 +36,8 @@ class AffNIST( object ):
 
         print( "loading data..." )
 
-        train_data_path = self._dataset_path + "training_and_validation_batches/"
-        test_data_path  = self._dataset_path
+        train_data_path = self.Dcfg._dataset_path + "training_and_validation_batches/"
+        test_data_path  = self.Dcfg._dataset_path
 
         train_x = np.empty( [ 0, 1600 ] )
         train_y = np.empty( [ 0 ] )
@@ -53,7 +51,7 @@ class AffNIST( object ):
         test_data = sio.loadmat( test_data_path + "test.mat" )
 
         test_x = np.transpose( test_data[0][0][2] )
-        test_y = test_data[0][0][5][0]   # shape = [320000]
+        test_y = test_data[0][0][5][0]
 
         print(  "train_x shape:{}".format( train_x.shape ) + \
                 "train_y shape:{}".format( train_y.shape ) + \
@@ -62,4 +60,8 @@ class AffNIST( object ):
         
         print( "data loaded!" )
 
-        return train_x, train_y, test_x, test_y, self.Dcfg
+        return train_x, train_y, test_x, test_y
+
+    def get_dataset_config( self ):
+
+        return self.Dcfg
