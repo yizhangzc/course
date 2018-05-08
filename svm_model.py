@@ -32,7 +32,7 @@ class SvmModel( object ):
 
     def build_model( self ):
 
-        self._classifier = svm.SVM( C = self._C, kernel = self._kernel, gamma = self._gamma )
+        self._classifier = svm.SVC( C = self._C, kernel = self._kernel, gamma = self._gamma )
         # http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
         self._classifier.fit( self._train_x, self._train_y )
 

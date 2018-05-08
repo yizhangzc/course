@@ -52,8 +52,8 @@ class AffNIST( object ):
         print( "test.mat finished!" )
 
 
-        test_x = np.transpose( test_data[0][0][2] )
-        test_y = test_data[0][0][5][0]
+        test_x = np.transpose( test_data["affNISTdata"][0][0][2] )
+        test_y = test_data["affNISTdata"][0][0][5][0]
 
         print(  "train_x shape:{}".format( train_x.shape ) + \
                 "train_y shape:{}".format( train_y.shape ) + \
