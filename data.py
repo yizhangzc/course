@@ -5,7 +5,7 @@ __author__ = 'yizhangzc'
 # author:       zju_cs / Yi Zhang / 21721190
 # mail:         yizhangzc@gmail.com
 # data:         2018/5
-# environment:  ubuntu 16.04 / python 3.5 / numpy 1.14 / tensorflow 1.2 / CUDA 8.0
+# environment:  ubuntu 14.04 / python 3.5 / numpy 1.14 / tensorflow 1.2 / CUDA 8.0
 
 import numpy as np
 
