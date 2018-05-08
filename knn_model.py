@@ -51,5 +51,3 @@ class KnnModel( object ):
                 "confusion_matrix: {}".format( conf_mtrix ) )
 
         print( "prediction finished!" )
-
-

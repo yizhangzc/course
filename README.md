@@ -1,7 +1,7 @@
 # course
 CV coursework
 
-classification in AffNIST dataset( including svm_model, knn_model, dnn_model )
+Classification in AffNIST dataset( including svm_model, knn_model, dnn_model )
 
 Dataset: AffNIST from https://www.cs.toronto.edu/~tijmen/affNIST/
     
