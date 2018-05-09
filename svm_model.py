@@ -14,7 +14,7 @@ from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
 
 class SvmModel( object ):
 
-    def __init__( self, dataset ):
+    def __init__( self, dataset, log_path ):
         
         self._dataset   = dataset
         self._kernel    = 'rbf'
@@ -30,7 +30,7 @@ class SvmModel( object ):
         self._test_x, self._test_y = skutils.shuffle(test_x, test_y, random_state=0)
 
 
-    def build_model( self ):
+    def training( self ):
 
         self._classifier = svm.SVC( C = self._C, kernel = self._kernel, gamma = self._gamma )
         # http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
@@ -38,7 +38,7 @@ class SvmModel( object ):
 
         print( "model built!" )
 
-    def run_model( self ):
+    def evaluate( self ):
         preds = self._classifier.predict( self._test_x )
 
         accuracy = accuracy_score( self._test_y, preds, range( self._dataset._class_num ) )
