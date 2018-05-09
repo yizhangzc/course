@@ -37,10 +37,10 @@ class AffNIST( object ):
         train_data_path = self.cfg._dataset_path + "training_and_validation_batches/"
         test_data_path  = self.cfg._dataset_path
 
-        train_x = np.empty( [ 0, 1600 ] )
-        train_y = np.empty( [ 0 ] )
+        train_x = np.empty( [ 0, 1600 ], dtype = np.float32 )
+        train_y = np.empty( [ 0 ], dtype = np.int32 )
 
-        for i in range( 32 ):
+        for i in range( 2 ):
 
             data = sio.loadmat( train_data_path + "{}.mat".format( i + 1 ) )
             train_x = np.vstack( ( train_x, np.transpose( data["affNISTdata"][0][0][2] ) ) )
@@ -55,10 +55,13 @@ class AffNIST( object ):
         test_x = np.transpose( test_data["affNISTdata"][0][0][2] )
         test_y = test_data["affNISTdata"][0][0][5][0]
 
-        print(  "train_x shape:{}".format( train_x.shape ) + \
-                "train_y shape:{}".format( train_y.shape ) + \
-                "test_x shape:{}".format( test_x.shape ) + \
-                "test_y shape:{}".format( test_y.shape ) )
+        test_x.astype( np.float32 )
+        test_y.astype( np.int32 )
+
+        print(  "train_x shape:{} type:{}\n".format( train_x.shape, train_x.dtype ) + \
+                "train_y shape:{} type:{}\n".format( train_y.shape, train_y.dtype ) + \
+                "test_x shape:{} type:{}\n".format( test_x.shape, test_x.dtype ) + \
+                "test_y shape:{} type:{}".format( test_y.shape, test_y.dtype ) )
         
         print( "data loaded!" )
 

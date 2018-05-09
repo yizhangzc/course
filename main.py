@@ -13,15 +13,15 @@ import dnn_model
 import data
 import argparse
 
-def main( model, log_path ):
+def main( model ):
     dataset = data.AffNIST()
 
     if model == "svm" :
-        Model = svm_model.SvmModel( dataset, log_path )
+        Model = svm_model.SvmModel( dataset )
     elif model == "dnn":
-        Model = dnn_model.DnnModel( dataset, log_path )
+        Model = dnn_model.DnnModel( dataset )
     else:
-        Model = knn_model.KnnModel( dataset, log_path )
+        Model = knn_model.KnnModel( dataset )
 
     # Model = knn_model.KnnModel( DataSet )
     Model.load_data()
@@ -32,8 +32,8 @@ def main( model, log_path ):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="model selection for AffNIST classification")
-    parser.add_argument( '-m', '--model', type=str.lower, help='Type of using model',   default="svm", choices = ["svm", "knn", "dnn"], required=False)
-    parser.add_argument( '-l', '--log_path', type=str, help='Path to store log files',  default="./", required=True)
+    parser.add_argument(    '-m', '--model', type=str.lower, help='Type of using model', 
+                            default="svm", choices = ["svm", "knn", "dnn"], required=False)
     args = parser.parse_args()
 
-    main( args.model, args.log_path )
+    main( args.model )

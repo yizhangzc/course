@@ -14,7 +14,7 @@ from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
 
 class SvmModel( object ):
 
-    def __init__( self, dataset, log_path ):
+    def __init__( self, dataset ):
         
         self._dataset   = dataset
         self._kernel    = 'rbf'
@@ -41,9 +41,9 @@ class SvmModel( object ):
     def evaluate( self ):
         preds = self._classifier.predict( self._test_x )
 
-        accuracy = accuracy_score( self._test_y, preds, range( self._dataset._class_num ) )
-        f1 = f1_score( self._test_y, preds, range( self._dataset._class_num ) )
-        conf_mtrix = confusion_matrix( self._test_y, preds, range( self._dataset._class_num ) )
+        accuracy = accuracy_score( self._test_y, preds, range( self._dataset.cfg._class_num ) )
+        f1 = f1_score( self._test_y, preds, range( self._dataset.cfg._class_num ) )
+        conf_mtrix = confusion_matrix( self._test_y, preds, range( self._dataset.cfg._class_num ) )
 
         print(  "result: accuracy: {}  f1_score: {}  ".format( accuracy, f1 ) +\
                 "confusion_matrix: {}".format( conf_mtrix ) )
