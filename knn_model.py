@@ -44,7 +44,7 @@ class KnnModel( object ):
         preds = self._classifier.predict( self._test_x )
 
         accuracy = accuracy_score( self._test_y, preds, range( self._dataset.cfg._class_num ) )
-        f1 = f1_score( self._test_y, preds, range( self._dataset.cfg._class_num ) )
+        f1 = f1_score( self._test_y, preds, range( self._dataset.cfg._class_num ), average = 'micro' )
         conf_mtrix = confusion_matrix( self._test_y, preds, range( self._dataset.cfg._class_num ) )
 
         print(  "result: accuracy: {}  f1_score: {}  ".format( accuracy, f1 ) +\

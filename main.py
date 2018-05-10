@@ -22,7 +22,7 @@ def main( model, version, gpu ):
         Model = svm_model.SvmModel( dataset, gpu, log_path )
     elif model == "dnn":
         Model = dnn_model.DnnModel( dataset, gpu, log_path )
-    else:
+    else:1
         Model = knn_model.KnnModel( dataset, gpu, log_path )
 
     # Model = knn_model.KnnModel( DataSet )

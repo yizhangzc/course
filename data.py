@@ -40,7 +40,7 @@ class AffNIST( object ):
         train_x = np.empty( [ 0, 1600 ], dtype = np.float32 )
         train_y = np.empty( [ 0 ], dtype = np.int32 )
 
-        for i in range( 2 ):
+        for i in range( 32 ):
 
             data = sio.loadmat( train_data_path + "{}.mat".format( i + 1 ) )
             train_x = np.vstack( ( train_x, np.transpose( data["affNISTdata"][0][0][2] ) ) )

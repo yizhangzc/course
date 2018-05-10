@@ -41,8 +41,8 @@ class DnnModel( object ):
 
         self._is_training    = tf.placeholder( dtype = tf.bool )
         self._learning_rate  = tf.placeholder( dtype = tf.float32 )
-        self._X = tf.placeholder( dtype = tf.float32, shape = [ None, self._dataset._row, self._dataset._column, 1 ] )
-        self._Y = tf.placeholder( dtype = tf.float32, shape = [ None, self._dataset._class_num] )
+        self._X = tf.placeholder( dtype = tf.float32, shape = [ None, self._dataset.cfg._row, self._dataset.cfg._column, 1 ] )
+        self._Y = tf.placeholder( dtype = tf.float32, shape = [ None, self._dataset.cfg._class_num] )
 
     def one_hot( self, y, n_values ):
         return np.eye( n_values )[ np.array( y, dtype = np.int32 ) ]
@@ -72,9 +72,9 @@ class DnnModel( object ):
 
         if scale > train_size:
             a = scale - train_size
-            x1 = self._train_x[ self._train_x: ]
+            x1 = self._train_x[ self._data_pos: ]
             x2 = self._train_x[ 0: a ]
-            y1 = self._train_y[ self._train_x: ]
+            y1 = self._train_y[ self._data_pos: ]
             y2 = self._train_y[ 0: a ]
 
             self._data_pos = a
@@ -151,6 +151,9 @@ class DnnModel( object ):
 
         with tf.Session( config = sess_config ) as sess:
 
+            sess.run(tf.global_variables_initializer())
+            sess.run(tf.local_variables_initializer())
+
             train_writer    = tf.summary.FileWriter( self._log_path + '/train', graph = tf.get_default_graph() )
             best_accuracy   = 0.
             best_f1_score   = 0.
@@ -181,11 +184,13 @@ class DnnModel( object ):
                             self._is_training: False
                         } )
 
-                        labels  = np.append( labels,    np.argmax( self._test_y[ start: end ], 1 ), axis = 1 )
-                        preds   = np.append( preds,     np.argmax( preds_batch, 1 ), axis = 1 )
+                        # preds   = np.append( ( preds,     np.argmax( preds_batch, 1 ) ), axis = 1 )
+
+                        labels  = np.concatenate( [ labels, np.argmax( self._test_y[ start: end ], 1 ) ] )
+                        preds   = np.concatenate( [ preds,  np.argmax( preds_batch, 1 ) ] )
 
                     accuracy    = accuracy_score( labels, preds, range( self._dataset.cfg._class_num ) )
-                    f1          = f1_score( labels, preds, range( self._dataset.cfg._class_num ) )
+                    f1          = f1_score( labels, preds, range( self._dataset.cfg._class_num ), average = 'micro' )
                     conf_matrix     = confusion_matrix( labels, preds, range( self._dataset.cfg._class_num ) )
 
                     best_accuracy = max( best_accuracy, accuracy )
