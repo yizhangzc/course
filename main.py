@@ -13,27 +13,30 @@ import dnn_model
 import data
 import argparse
 
-def main( model ):
-    dataset = data.AffNIST()
+def main( model, version, gpu ):
+    dataset = data.AffNIST(  )
+
+    log_path = dataset.cfg._dataset_path + version + '/'
 
     if model == "svm" :
-        Model = svm_model.SvmModel( dataset )
+        Model = svm_model.SvmModel( dataset, gpu, log_path )
     elif model == "dnn":
-        Model = dnn_model.DnnModel( dataset )
+        Model = dnn_model.DnnModel( dataset, gpu, log_path )
     else:
-        Model = knn_model.KnnModel( dataset )
+        Model = knn_model.KnnModel( dataset, gpu, log_path )
 
     # Model = knn_model.KnnModel( DataSet )
     Model.load_data()
-    Model.training()
-    Model.evaluate()
+    Model.build_model()
+    Model.run_model()
 
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="model selection for AffNIST classification")
-    parser.add_argument(    '-m', '--model', type=str.lower, help='Type of using model', 
-                            default="svm", choices = ["svm", "knn", "dnn"], required=False)
+    parser.add_argument('-m', '--model',    type=str.lower, default="svm", help='Type of using model', choices = ["svm", "knn", "dnn"], required=False)
+    parser.add_argument('-v', '--version',  type=str, default = "", help='model version')
+    parser.add_argument('-g', '--gpu',      type=int, default =0,   help='assign task to selected gpu')
     args = parser.parse_args()
 
-    main( args.model )
+    main( args.model, args.version, args.gpu )

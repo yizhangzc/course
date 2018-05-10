@@ -16,7 +16,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 
 class KnnModel( object ):
 
-    def __init__( self, dataset ):
+    def __init__( self, dataset, gpu, log_path ):
         
         self._dataset = dataset
         self._neighbors_num = 5
@@ -31,7 +31,7 @@ class KnnModel( object ):
 
 
 
-    def training( self ):
+    def build_model( self ):
 
         self._classifier = neighbors.KNeighborsClassifier( n_neighbors = self._neighbors_num )
         # http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html
@@ -40,7 +40,7 @@ class KnnModel( object ):
         print( "model built!" )
 
 
-    def evaluate( self ):
+    def run_model( self ):
         preds = self._classifier.predict( self._test_x )
 
         accuracy = accuracy_score( self._test_y, preds, range( self._dataset.cfg._class_num ) )
