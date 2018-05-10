@@ -26,8 +26,8 @@ class KnnModel( object ):
         
         train_x, train_y, test_x, test_y = self._dataset.load_data()
 
-        self._train_x, self._train_y = skutils.shuffle(train_x, train_y, random_state=0)
-        self._test_x, self._test_y = skutils.shuffle(test_x, test_y, random_state=0)
+        self._train_x,  self._train_y   = skutils.shuffle(train_x,  train_y,    random_state=0)
+        self._test_x,   self._test_y    = skutils.shuffle(test_x,   test_y,     random_state=0)
 
 
 
@@ -44,10 +44,10 @@ class KnnModel( object ):
         preds = self._classifier.predict( self._test_x )
 
         accuracy = accuracy_score( self._test_y, preds, range( self._dataset.cfg._class_num ) )
-        f1 = f1_score( self._test_y, preds, range( self._dataset.cfg._class_num ), average = 'micro' )
+        f1 = f1_score( self._test_y, preds, range( self._dataset.cfg._class_num ), average = 'macro' )
         conf_mtrix = confusion_matrix( self._test_y, preds, range( self._dataset.cfg._class_num ) )
 
-        print(  "result: accuracy: {}  f1_score: {}  ".format( accuracy, f1 ) +\
-                "confusion_matrix: {}".format( conf_mtrix ) )
+        print(  "result: accuracy: {}  f1_score: {}\n".format( accuracy, f1 ) +\
+                "confusion_matrix:\n{}".format( conf_mtrix ) )
 
         print( "prediction finished!" )

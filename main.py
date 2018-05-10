@@ -16,13 +16,13 @@ import argparse
 def main( model, version, gpu ):
     dataset = data.AffNIST(  )
 
-    log_path = dataset.cfg._dataset_path + version + '/'
+    log_path = dataset.cfg._dataset_path + 'log/' + version + '/'
 
     if model == "svm" :
         Model = svm_model.SvmModel( dataset, gpu, log_path )
     elif model == "dnn":
         Model = dnn_model.DnnModel( dataset, gpu, log_path )
-    else:1
+    else:
         Model = knn_model.KnnModel( dataset, gpu, log_path )
 
     # Model = knn_model.KnnModel( DataSet )

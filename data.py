@@ -43,8 +43,8 @@ class AffNIST( object ):
         for i in range( 32 ):
 
             data = sio.loadmat( train_data_path + "{}.mat".format( i + 1 ) )
-            train_x = np.vstack( ( train_x, np.transpose( data["affNISTdata"][0][0][2] ) ) )
-            train_y = np.concatenate( [ train_y, data["affNISTdata"][0][0][5][0] ] )
+            train_x = np.vstack( ( train_x, np.transpose( data["affNISTdata"][0][0][2] )[0: 1000] ) )
+            train_y = np.concatenate( [ train_y, data["affNISTdata"][0][0][5][0][0: 1000] ] )
             print( "{}.mat finished!".format( i + 1 ) )
 
 
@@ -52,11 +52,14 @@ class AffNIST( object ):
         print( "test.mat finished!" )
 
 
-        test_x = np.transpose( test_data["affNISTdata"][0][0][2] )
-        test_y = test_data["affNISTdata"][0][0][5][0]
+        test_x = np.transpose( test_data["affNISTdata"][0][0][2] )[0: 1000]
+        test_y = test_data["affNISTdata"][0][0][5][0][0: 1000]
 
         test_x.astype( np.float32 )
         test_y.astype( np.int32 )
+
+        train_x = np.true_divide( train_x,  255. )
+        test_x  = np.true_divide( test_x,   255. )
 
         print(  "train_x shape:{} type:{}\n".format( train_x.shape, train_x.dtype ) + \
                 "train_y shape:{} type:{}\n".format( train_y.shape, train_y.dtype ) + \

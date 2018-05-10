@@ -22,7 +22,7 @@ class DnnModel( object ):
     
     def __init__( self, dataset, gpu, log_path ):
         self._dataset       = dataset
-        self._batch_size    = 50
+        self._batch_size    = 100
         self._data_pos      = 0
 
         self._filter_size   = 3
@@ -135,10 +135,12 @@ class DnnModel( object ):
         tf.summary.scalar( "learning", self._learning_rate )
 
         merged = tf.summary.merge_all()
+        update_ops  = tf.get_collection( tf.GraphKeys.UPDATE_OPS ) # add batch_norm update node
 
         self._predictions   = predictions
         self._train_step    = train_step
         self._merged        = merged
+        self._update_ops    = update_ops
 
 
     def run_model( self ):
@@ -162,7 +164,7 @@ class DnnModel( object ):
                 x, y    = self.next_batch( )
                 lr      = self._min_lr + ( self._max_lr - self._min_lr ) * math.exp( -i / self._decay_speed )
 
-                summary, _ = sess.run( [ self._merged, self._train_step ], feed_dict={
+                summary, _, _ = sess.run( [ self._merged, self._update_ops, self._train_step ], feed_dict={
                     self._X: x,
                     self._Y: y,
                     self._learning_rate:    lr,
@@ -190,7 +192,7 @@ class DnnModel( object ):
                         preds   = np.concatenate( [ preds,  np.argmax( preds_batch, 1 ) ] )
 
                     accuracy    = accuracy_score( labels, preds, range( self._dataset.cfg._class_num ) )
-                    f1          = f1_score( labels, preds, range( self._dataset.cfg._class_num ), average = 'micro' )
+                    f1          = f1_score( labels, preds, range( self._dataset.cfg._class_num ), average = 'macro' )
                     conf_matrix     = confusion_matrix( labels, preds, range( self._dataset.cfg._class_num ) )
 
                     best_accuracy = max( best_accuracy, accuracy )

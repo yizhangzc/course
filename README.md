@@ -10,6 +10,16 @@ Dataset: AffNIST from https://www.cs.toronto.edu/~tijmen/affNIST/
     transformed/test.mat used for testing
 
 
-Run instruction: python main.py -m model( model : svm or dnn or knn )
+Run instruction: python main.py -m model -v version -g gpu
 
-    eg: "python main.py -m svm"
+    model: svm / dnn / knn     for use different clasification model
+    version:    any string     for differentiate different processes and logs
+    gpu:    0 ~ n (n : the number of gpu available on the computer)  for specify gpu used for compute( only used in dnn model )
+
+    eg: "python main.py -m svm -v 000 -g 0"
+
+
+Tips:
+
+    1. use tensorboard to watch the log and compute graph( usage tensorboard --logdir=dir --port=600x )
+    2. for speeding up the experiment, only a part of the data is used. if you want use all data of the dataset, Remove the slicing operation( eg: data["affNISTdata"][0][0][5][0][0: 1000] -> data["affNISTdata"][0][0][5][0] )
