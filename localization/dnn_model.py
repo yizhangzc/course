@@ -25,7 +25,7 @@ class DnnModel( object ):
     
     def __init__( self, dataset, gpu, log_path ):
         self._dataset       = dataset
-        self._batch_size    = 100
+        self._batch_size    = 32
         self._train_pos     = 0
         self._ckpt_path     = self._dataset._dataset_path + 'vgg_16.ckpt'
 
@@ -90,9 +90,9 @@ class DnnModel( object ):
         predictions, _ = vgg.vgg_16( self._X, num_classes = self._dataset._out_dim, is_training = self._is_training )
 
         # smooth l1 loss
-        localization_loss   = tf.reduce_sum( tf.where( tf.less( tf.abs( self._Y - predictions ), 1. ) ),
+        localization_loss   = tf.reduce_sum( tf.where( tf.less( tf.abs( self._Y - predictions ), 1. ),
                                             0.5 * tf.square( self._Y - predictions ) ,
-                                            tf.abs( self._Y - predictions ) - 0.5 )
+                                            tf.abs( self._Y - predictions ) - 0.5 ) )
 
         slim.losses.add_loss( localization_loss )
         total_loss      = slim.losses.get_total_loss( add_regularization_losses = True )
@@ -116,10 +116,13 @@ class DnnModel( object ):
         os.environ["CUDA_VISIBLE_DEVICES"] = str( self._gpu ) # gpu selection
 
         sess_config = tf.ConfigProto()  
-        sess_config.gpu_options.per_process_gpu_memory_fraction = 0.4  # 40% gpu
+        sess_config.gpu_options.per_process_gpu_memory_fraction = 1  # 40% gpu
         sess_config.gpu_options.allow_growth = True      # dynamic growth
 
-        variables_to_restore = slim.get_variables_to_restore( exclude = [ 'fc8' ] )
+
+        # variables_to_restore = slim.get_variables_to_restore( exclude = [ 'fc8', 'Adam', 'Adam_1' ] )
+        variables_to_restore = slim.get_model_variables()
+        variables_to_restore = variables_to_restore[:-2]
         restorer = tf.train.Saver( variables_to_restore )
 
         with tf.Session( config = sess_config ) as sess:
