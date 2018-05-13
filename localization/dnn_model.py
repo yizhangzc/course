@@ -116,7 +116,7 @@ class DnnModel( object ):
         os.environ["CUDA_VISIBLE_DEVICES"] = str( self._gpu ) # gpu selection
 
         sess_config = tf.ConfigProto()  
-        sess_config.gpu_options.per_process_gpu_memory_fraction = 1  # 40% gpu
+        sess_config.gpu_options.per_process_gpu_memory_fraction = 1  # 100% gpu
         sess_config.gpu_options.allow_growth = True      # dynamic growth
 
         # import pdb; pdb.set_trace()
