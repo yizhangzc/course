@@ -25,7 +25,7 @@ class DnnModel( object ):
     
     def __init__( self, dataset, gpu, log_path ):
         self._dataset       = dataset
-        self._batch_size    = 32
+        self._batch_size    = 50 
         self._train_pos     = 0
         self._ckpt_path     = self._dataset._dataset_path + 'vgg_16.ckpt'
 
@@ -90,7 +90,7 @@ class DnnModel( object ):
         predictions, _ = vgg.vgg_16( self._X, num_classes = self._dataset._out_dim, is_training = self._is_training )
 
         # smooth l1 loss
-        localization_loss   = tf.reduce_sum( tf.where( tf.less( tf.abs( self._Y - predictions ), 1. ),
+        localization_loss   = tf.reduce_mean( tf.where( tf.less( tf.abs( self._Y - predictions ), 1. ),
                                             0.5 * tf.square( self._Y - predictions ) ,
                                             tf.abs( self._Y - predictions ) - 0.5 ) )
 
