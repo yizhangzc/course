@@ -119,7 +119,7 @@ class DnnModel( object ):
         sess_config.gpu_options.per_process_gpu_memory_fraction = 1  # 40% gpu
         sess_config.gpu_options.allow_growth = True      # dynamic growth
 
-
+        # import pdb; pdb.set_trace()
         # variables_to_restore = slim.get_variables_to_restore( exclude = [ 'fc8', 'Adam', 'Adam_1' ] )
         variables_to_restore = slim.get_model_variables()
         variables_to_restore = variables_to_restore[:-2]
@@ -148,12 +148,6 @@ class DnnModel( object ):
                 } )
 
                 train_writer.add_summary( summary, i )
-
-        #         if i % self._print_interval == 0 :
-            
-        #     print( "best_accuracy: {}  best_f1_score: {}".format( best_accuracy, best_f1_score ) )
-
-        # print( "finish!" )
 
 
 if __name__ == '__main__':
